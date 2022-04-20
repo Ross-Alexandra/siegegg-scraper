@@ -1,6 +1,7 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import * as path from 'path';
 import * as isDev from 'electron-is-dev';
+import * as api from './api';
 import installExtension, { REACT_DEVELOPER_TOOLS } from "electron-devtools-installer";
 
 let win: BrowserWindow | null = null;
@@ -12,7 +13,7 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: path.join(__dirname, 'api.js')
+      preload: path.join(__dirname, 'preload.js')
     }
   })
 
@@ -57,4 +58,8 @@ app.on('activate', () => {
   if (win === null) {
     createWindow();
   }
+});
+
+Object.entries(api).forEach(([functionName, {execute}]) => {
+    ipcMain.handle(functionName, execute);
 });

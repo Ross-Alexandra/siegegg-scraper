@@ -1,17 +1,18 @@
-import logo from './logo.svg';
 import './App.css';
+import { useApiData } from './hooks';
+import { useCallback } from 'react';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-            {window.api.test}
-        </p>
-      </header>
-    </div>
-  );
+    const getTest = useCallback(async () => {
+        return await window.api.test();
+    }, []);
+    const [testData, dataStatus] = useApiData(getTest);
+
+    return (
+        <div className="App">
+            <p>{testData}</p>
+        </div>
+    );
 }
 
 export default App;
