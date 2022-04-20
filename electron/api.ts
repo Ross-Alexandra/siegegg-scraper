@@ -74,8 +74,10 @@ export const getTeams: IApiFunction = {
         return teamCards.map((index, element) => {
             const cardText = $teamPage(element).text();
 
-            // Split on whitespace on the .text() will return
-            // "    teamName     player1      player2 ...   "
+            // .text() will return =>
+            // "    Team Name     player1      player2 ...   "
+            // Get team name by trimming, finding the first 2+ whitespace, and trim
+            // Get roster by removing team name, turning 2+ whitespaces into ' ', and drop initial ''.
             const teamName = cardText.trim().match(/.*?(\s\s+)/g)?.[0]?.trim() ?? 'Error Parsing Team';
             const roster = cardText.trim().replace(teamName, '').replace(/\s\s+/g, ' ').split(' ').slice(1);
 
