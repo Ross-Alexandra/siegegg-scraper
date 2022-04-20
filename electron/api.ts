@@ -5,13 +5,20 @@ import * as cheerio from 'cheerio';
 export interface IApiFunction {
     execute: (...args: any[]) => Promise<any>;
     handle: (...args: any[]) => Promise<any>;
-}
+};
 
 export interface ICompetition {
     logoUrl: string;
     name: string;
     url: string;
-}
+};
+
+export interface ITeam {
+    logoUrl: string,
+    roster: string[],
+    name: string,
+    url: string;
+};
 
 export const test: IApiFunction = {
     execute: async () => {
@@ -37,11 +44,11 @@ export const getCompetitions: IApiFunction = {
 
             const competitions = $page(".card");
             return competitions.map((index, element) => {
-                const name: string = $page(element)?.find('h3')?.text()?.toString() ?? '';
-                const logoUrl: string = $page(element)?.find('img')?.attr('src')?.toString() ?? '';
-                const url: string = $page(element)?.attr('href')?.toString() ?? '';
-
-                return {logoUrl, name, url};
+                return {
+                    logoUrl: $page(element)?.find('img')?.attr('src')?.toString() ?? '',
+                    name: $page(element)?.find('h3')?.text()?.toString() ?? '',
+                    url: $page(element)?.attr('href')?.toString() ?? ''
+                };
             }).toArray();
         }
 
@@ -55,5 +62,32 @@ export const getCompetitions: IApiFunction = {
     },
     handle: async (ongoing: boolean | undefined) => {
         return await ipcRenderer.invoke('getCompetitions', ongoing);
+    }
+}
+
+export const getTeams: IApiFunction = {
+    execute: async (event, competitionUrl: string): Promise<ITeam[]> => {
+        const {data: teamPage} = await axios.get(`${competitionUrl}?stats=full-stats`);
+        const $teamPage = cheerio.load(teamPage);
+
+        const teamCards = $teamPage('*:contains("Participating teams")').closest('section').find('.card');
+        return teamCards.map((index, element) => {
+            const cardText = $teamPage(element).text();
+
+            // Split on whitespace on the .text() will return
+            // "    teamName     player1      player2 ...   "
+            const teamName = cardText.trim().match(/.*?(\s\s+)/g)?.[0]?.trim() ?? 'Error Parsing Team';
+            const roster = cardText.trim().replace(teamName, '').replace(/\s\s+/g, ' ').split(' ').slice(1);
+
+            return {
+                logoUrl: $teamPage(element)?.find('img[src$=".png"]')?.attr('src')?.toString() ?? '',
+                name: teamName,
+                roster: roster,
+                url: `https://siege.gg${$teamPage(element).find('a').attr('href')?.toString() ?? ''}`
+            };
+        }).toArray();
+    },
+    handle: async (competitionUrl: string) => {
+        return await ipcRenderer.invoke('getTeams', competitionUrl);
     }
 }
