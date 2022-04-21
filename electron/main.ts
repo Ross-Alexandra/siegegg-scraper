@@ -17,6 +17,8 @@ function createWindow() {
     }
   })
 
+  win.setResizable(false);
+
   if (isDev) {
     win.loadURL('http://localhost:3000/index.html');
   } else {

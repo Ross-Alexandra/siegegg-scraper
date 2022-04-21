@@ -3,29 +3,46 @@ import {Page} from './page';
 
 import {BookWrapper} from './elements';
 
-interface ChildrenProps {
-    title: string;
-}
-
 interface BookProps {
     children: ReactNode;
 }
 
+type TNextPageCallback = (...args: any[]) => void;
+type TPageContext = any;
+export interface IPageComponent {
+    // Consumed by the Book component.
+    pageTitle: string;
+
+    // Passed via magic from the Book component.
+    pageContext?: TPageContext;
+    nextPage?: TNextPageCallback;
+}
+
 export function Book({children}: BookProps) {
     const [activeIndex, setActiveIndex] = useState(0);
+    const [pageContexts, setPageContexts] = useState(Array(Children.count(children)).fill({}));
 
     const indexAwareChildren = Children.map(children, (child, index) => {
-        if (!React.isValidElement<ChildrenProps>((child))) return null;
+        if (!React.isValidElement<IPageComponent>((child))) return null;
 
-        const {title} = child.props;
+        const {pageTitle} = child.props;
+        const nextPage = (pageContext: any): void => {
+            setPageContexts(previousPageContexts => {
+                const newPageContexts = [...previousPageContexts];
+                newPageContexts[index + 1] = pageContext;
+
+                return newPageContexts;
+            });
+            setActiveIndex(index + 1);
+        }
         return (
             <Page 
-                title={title ?? 'No title'}
+                title={pageTitle ?? 'No title'}
                 index={index}
                 activeIndex={activeIndex}
                 onClickTitle={() => void setActiveIndex(index)}
             >
-                {React.cloneElement(child as React.ReactElement<any>, {nextPage: () => setActiveIndex(index + 1)})}
+                {React.cloneElement(child as React.ReactElement<IPageComponent>, {nextPage, pageContext: pageContexts[index]})}
             </Page>
         );
     });

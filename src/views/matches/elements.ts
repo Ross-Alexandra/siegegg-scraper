@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-export const CompetitionWrapper = styled.div`
+export const MatchesWrapper = styled.div`
     width: 100%;
     height: 100%;
 
