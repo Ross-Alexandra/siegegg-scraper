@@ -1,16 +1,15 @@
 import './App.css';
-import { useApiData } from './hooks';
-import { useCallback } from 'react';
+import { Book } from './components/Book';
+import { CompetitionView } from './views/competitions';
 
 function App() {
-    const getTest = useCallback(async () => {
-        return await window.api.test();
-    }, []);
-    const [testData, dataStatus] = useApiData(getTest);
-
     return (
         <div className="App">
-            <p>{testData}</p>
+            <Book>
+                <CompetitionView title='Competitions' />
+                <div title='teams' style={{backgroundColor: 'blue', width: '100%', height: '100%'}}></div>
+                <div title='matches' style={{backgroundColor: 'green', width: '100%', height: '100%'}}></div>
+            </Book>
         </div>
     );
 }
