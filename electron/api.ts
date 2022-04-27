@@ -6,7 +6,7 @@ import {
     ICompetition,
     ITeam,
     IMatch
-} from './interfaces';
+} from '../common-interfaces';
 
 export const test: IApiFunction = {
     execute: async () => {

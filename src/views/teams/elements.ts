@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { theme } from "../../theme";
 
 export const TeamsWrapper = styled.div`
     width: 100%;
@@ -7,5 +8,5 @@ export const TeamsWrapper = styled.div`
     display: grid;
     place-items: center;
 
-    background-color: white;
+    background-color: ${theme.white};
 `;

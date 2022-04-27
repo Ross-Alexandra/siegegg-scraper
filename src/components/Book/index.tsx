@@ -7,8 +7,8 @@ interface BookProps {
     children: ReactNode;
 }
 
-type TNextPageCallback = (...args: any[]) => void;
-type TPageContext = any;
+export type TNextPageCallback = (...args: any[]) => void;
+export type TPageContext = any;
 export interface IPageComponent {
     // Consumed by the Book component.
     pageTitle: string;

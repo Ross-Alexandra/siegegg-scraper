@@ -1,5 +1,5 @@
-import { IPageComponent } from "../../components/Book";
-import { Spinner } from "../../components/Spinner";
+import { IPageComponent } from "../../components/book";
+import { Spinner } from "../../components/svg/spinner";
 
 import {
     MatchesWrapper

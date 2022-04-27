@@ -1,5 +1,5 @@
 import './App.css';
-import { Book } from './components/Book';
+import { Book } from './components/book';
 import { CompetitionView } from './views/competitions';
 import { MatchesView } from './views/matches';
 import { TeamsView } from './views/teams';

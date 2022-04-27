@@ -1,13 +1,8 @@
+import { theme } from "../../../theme";
+import { ISVG } from "../interface";
 import { SpinningGroup } from "./elements";
 
-interface Props extends React.HTMLAttributes<HTMLElement> {
-    color?: string;
-    width?: number | string;
-    height?: number | string;
-    className?: string
-}
-
-export function Spinner({color='black', width=35, height=35, className, ...props}: Props) {
+export function Spinner({color=theme.black, width=35, height=35, className, ...props}: ISVG) {
     return (
         <svg {...props as any} className={className} width={width} height={height} viewBox="0 0 25 25">
             <SpinningGroup stroke={color} strokeWidth="2">

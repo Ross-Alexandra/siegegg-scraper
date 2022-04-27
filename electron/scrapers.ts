@@ -3,7 +3,7 @@ import * as cheerio from 'cheerio';
 
 import {
     ICompetition, ITeam, IMatch
-} from './interfaces';
+} from '../common-interfaces';
 
 export async function scrapeTotalPages(paginatedURL: string): Promise<number> {
     const {data: frontPage} = await axios.get(paginatedURL);

@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { theme } from "../../theme";
 
 export const BookWrapper = styled.div`
     position: relative;
@@ -41,12 +42,12 @@ export const PageWrapper = styled.div<PositionAwareProps>`
 export const PageTitleBox = styled.div<PositionAwareProps>`
     width: ${pageEndWidth}px;
     height: 100vh;
-    border-right: ${({index}: PositionAwareProps) => index === 0 ? 0 : pageEndBorderWidth}px solid white;
+    border-right: ${({index}: PositionAwareProps) => index === 0 ? 0 : pageEndBorderWidth}px solid ${theme.white};
 
     display: grid;
     place-items: center;
 
-    background-color: black;
+    background-color: ${theme.darkBlue};
     cursor: ${({index, activeIndex}: PositionAwareProps) => index < activeIndex ? 'pointer' : 'default' };
     
     transform: rotate(-180deg);
@@ -59,8 +60,7 @@ export const PageTitle = styled.h2`
     text-transform: uppercase;
     font-style: italic;
 
-    background-color: black;
-    color: white;
+    color: ${theme.white};
 
     writing-mode: vertical-rl;
     text-orientation: mixed;
