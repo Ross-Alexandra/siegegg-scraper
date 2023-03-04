@@ -18,7 +18,7 @@ export function CompetitionsPage({nextBookPage, nextPage, prevPage, gotoPage, pa
             {pageData.map(competition => 
                 <CompetitionButton
                     key={competition.url}
-                    onClick={() => nextBookPage?.({competition: competition.name})}
+                    onClick={() => nextBookPage?.({competition})}
                     {...competition}
                 />
             )}
